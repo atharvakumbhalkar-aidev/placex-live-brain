@@ -1,0 +1,52 @@
+# ==============================================================================
+# Environment & Secret Credentials
+# ==============================================================================
+.env
+.env.*
+*.env
+credentials.json
+token.json
+
+# Whitelist safe configuration template
+!.env.example
+
+# ==============================================================================
+# Audio, Media & Telemetry Artifacts
+# ==============================================================================
+*.pcm
+*.wav
+*.jsonl
+
+# Preserve committed test fixtures
+!tests/fixtures/**
+!tests/fixtures/*.wav
+!tests/fixtures/*.jsonl
+
+# ==============================================================================
+# Temporary Files, Caches & Logs
+# ==============================================================================
+.tmp/
+*/.tmp/
+*.log
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Python Virtual Environments
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE & Tooling Configs
+.agents/
+antigravity_settings.json
+mcp_config.json
+
+# Operating System Metadata
+.DS_Store
+Thumbs.db
