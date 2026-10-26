@@ -1,0 +1,108 @@
+{
+  "session_id": "331d943f-46a7-4102-9edf-f00e4460a877",
+  "metadata": {
+    "company_name": "ApexScale",
+    "company_domain": "apexscale.example",
+    "role_title": "Senior Software Engineer",
+    "target_level": "L5 / Senior",
+    "generated_at": "2026-08-16T03:53:12.213846",
+    "tech_stack_detected": [
+      "Python",
+      "Distributed Systems",
+      "PostgreSQL",
+      "Kafka",
+      "Redis"
+    ],
+    "domain_focus": [
+      "High-throughput API design",
+      "Fault tolerance",
+      "Event-driven architecture"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1_warmup",
+      "index": 1,
+      "tier": "warmup",
+      "topic": "High-Level Architecture & Background",
+      "primary_prompt": "To start off, could you walk me through the highest-scale backend system you've built recently, specifically highlighting where bottlenecks occurred and how you resolved them?",
+      "context_background": "Calibrates candidate's comfort level and baseline seniority against ApexScale's scale.",
+      "allowed_micro_probes": [
+        "What was the primary bottleneck: disk I/O, database concurrency, or network latency?",
+        "How did you measure and monitor that latency in production?"
+      ],
+      "scoring_rubric": {
+        "max_points": 10,
+        "criteria": [
+          {
+            "dimension": "Architectural Clarity",
+            "weight": 0.5,
+            "poor_0_3": "Vague, cannot clearly explain component boundaries or data flow.",
+            "good_4_7": "Coherently describes services, database interactions, and cache layer.",
+            "expert_8_10": "Precise breakdown with concrete throughput numbers (RPS, p99 latency) and failure modes."
+          },
+          {
+            "dimension": "Tradeoff Articulation",
+            "weight": 0.5,
+            "poor_0_3": "Focuses only on what went well, ignores architectural compromises.",
+            "good_4_7": "Acknowledges why certain technologies were chosen over alternatives.",
+            "expert_8_10": "Deep insight into technical debt taken on, operational burden, and future scale limits."
+          }
+        ],
+        "key_phrases_expected": [
+          "throughput",
+          "latency",
+          "caching",
+          "bottleneck",
+          "sharding"
+        ],
+        "anti_patterns": [
+          "claiming the architecture had zero tradeoffs",
+          "unable to quote rough scale numbers"
+        ]
+      }
+    },
+    {
+      "id": "q2_core_technical",
+      "index": 2,
+      "tier": "core_technical",
+      "topic": "Data Consistency & Idempotency",
+      "primary_prompt": "In high-throughput services like ApexScale's core ingestion pipeline, we often receive duplicate event streams. How would you design an idempotent processing pipeline using Kafka and a relational database without degrading write throughput?",
+      "context_background": "Tests core distributed data consistency requirements relevant to ApexScale's domain.",
+      "allowed_micro_probes": [
+        "How do you handle the race condition if two identical events arrive concurrently across worker pods?",
+        "What is your strategy if the cache expires before downstream acknowledgment?"
+      ],
+      "scoring_rubric": {
+        "max_points": 10,
+        "criteria": [
+          {
+            "dimension": "Correctness & Concurrency Control",
+            "weight": 0.6,
+            "poor_0_3": "Proposes naive read-then-write check without locking, vulnerable to race conditions.",
+            "good_4_7": "Uses unique database constraint or distributed lock (Redis/Redlock) with idempotency keys.",
+            "expert_8_10": "Proposes transactional outbox pattern, DB-level upsert with deterministic deduplication token, or changelog CDC."
+          },
+          {
+            "dimension": "Performance Optimization",
+            "weight": 0.4,
+            "poor_0_3": "Proposes global blocking lock that collapses throughput to 10 RPS.",
+            "good_4_7": "Partitions Kafka keys to guarantee partition-level ordering.",
+            "expert_8_10": "Combines partition hashing with bloom filters or sliding window Redis buffers to minimize DB roundtrips."
+          }
+        ],
+        "key_phrases_expected": [
+          "idempotency key",
+          "kafka partition",
+          "transactional outbox",
+          "unique constraint",
+          "upsert"
+        ],
+        "anti_patterns": [
+          "assuming Kafka never delivers duplicates with at-least-once semantics",
+          "in-memory only dedup across multi-pod cluster"
+        ]
+      }
+    }
+  ]
+}
