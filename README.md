@@ -115,4 +115,4 @@ Turn latency is tracked across discrete pipeline stages using non-blocking obser
 
 ## License
 
-MIT License. Copyright (c) 2026 Aki.
+MIT License. Copyright (c) 2026 Atharva kumbhalkar- aidev.
